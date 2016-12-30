@@ -126,6 +126,11 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
                         base_path=conf["dropbox_base_path"], timestamp=ts)
                     client.put_file(path, open(t.path, "rb"))
                     t.cleanup()
+                elif 'emailto' in conf:
+                    t = TempImage()
+                    cv2.imwrite(t.path, frame)
+                    shutil.copy2(t.path, '../images/image{}.jpg'.format(ts))
+                    t.cleanup()
                 else:
                                                                                # write the image to temporary file
                     t = TempImage()
