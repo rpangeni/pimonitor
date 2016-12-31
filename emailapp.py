@@ -26,9 +26,9 @@ def sendEmailUsingGmail(filename,emailto, msgTxt, gmail_user, gmail_password):
             part['Content-Disposition'] = 'attachment; filename="%s"' % basename(filename)
             outer.attach(part)
         server.sendmail(gmail_user, emailto, outer.as_string())
-        print("Sent succesfully.")
+        print("Sent succesfully.\n")
     except smtplib.SMTPAuthenticationError as e:
-        print ("Something went wrong: ",  sys.exec_info()[0])
+        print ("Failed to send email. Something went wrong: \n",  sys.exec_info()[0])
     
 if __name__ == '__main__':
     #conf = json.load(open('conf.json'))
