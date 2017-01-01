@@ -29,7 +29,7 @@ def sendEmailUsingGmail(filename,emailto, msgTxt, gmail_user, gmail_password):
         server.sendmail(gmail_user, emailto, outer.as_string())
         logger.info("Sent succesfully.\n")
     except smtplib.SMTPAuthenticationError as e:
-        logger.failed ("Failed to send email. Something went wrong: \n",  sys.exec_info()[0])
+        logger.error ("Failed to send email. Probably wrong password\n")
     
 if __name__ == '__main__':
     gmail_user = 'rupakpangeni@gmail.com'
