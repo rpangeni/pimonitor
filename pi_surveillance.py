@@ -12,17 +12,20 @@ import json
 import time
 import cv2
 import shutil
+import emailapp
+import getpass
  
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--conf", required=True,
     help="path to the JSON configuration file")
 args = vars(ap.parse_args())
- 
+
 # filter warnings, load the configuration and initialize the Dropbox
 # client
 warnings.filterwarnings("ignore")
 conf = json.load(open(args["conf"]))
+gmail_password = getpass.getpass('Enter password for gmail account ') 
 client = None
 
 if conf["use_dropbox"]:
@@ -126,10 +129,11 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
                         base_path=conf["dropbox_base_path"], timestamp=ts)
                     client.put_file(path, open(t.path, "rb"))
                     t.cleanup()
-                elif 'emailto' in conf:
+                elif 'email_to' in conf:
                     t = TempImage()
                     cv2.imwrite(t.path, frame)
                     shutil.copy2(t.path, '../images/image{}.jpg'.format(ts))
+                    emailapp.sendEmailUsingGmail(t.path, conf["email_to"], 'Security Image',  conf["gmail_user"], gmail_password)
                     t.cleanup()
                 else:
                                                                                # write the image to temporary file
