@@ -6,11 +6,12 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from os.path import basename
 import json
-
+import logging
 
 
 def sendEmailUsingGmail(filename,emailto, msgTxt, gmail_user, gmail_password):
     try:
+        logger = logging.getLogger('Emailapp')
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.ehlo()
         server.starttls()
@@ -26,12 +27,11 @@ def sendEmailUsingGmail(filename,emailto, msgTxt, gmail_user, gmail_password):
             part['Content-Disposition'] = 'attachment; filename="%s"' % basename(filename)
             outer.attach(part)
         server.sendmail(gmail_user, emailto, outer.as_string())
-        print("Sent succesfully.\n")
+        logger.info("Sent succesfully.\n")
     except smtplib.SMTPAuthenticationError as e:
-        print ("Failed to send email. Something went wrong: \n",  sys.exec_info()[0])
+        logger.failed ("Failed to send email. Something went wrong: \n",  sys.exec_info()[0])
     
 if __name__ == '__main__':
-    #conf = json.load(open('conf.json'))
     gmail_user = 'rupakpangeni@gmail.com'
     gmail_password = getpass.getpass('enter password for gmail account')
     sendEmailUsingGmail(r'C:/temp/image2016Dec29-201713.jpg', 'r_pangeni@yahoo.com', 'Security image', gmail_user, gmail_password)
